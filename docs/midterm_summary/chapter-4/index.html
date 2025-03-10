@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Chapter 4 | RNN Class</title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    Midterm Exam Summary
+Neural Networks Overview
+
+Neural networks are universal approximators that can model Boolean, categorical, or real-valued functions.
+Capable of pattern recognition in static inputs, time-series, and sequences.
+Training is required for prediction.
+Neural networks consist of multiple layers:
+
+Input Layer: Accepts raw data.
+Hidden Layers: Extracts features through weighted connections.
+Output Layer: Produces final prediction or classification.
+
+
+Common activation functions:
+
+Sigmoid: $ \sigma(x) = \frac{1}{1 &#43; e^{-x}} $ (good for probabilities)
+ReLU: $ f(x) = \max(0, x) $ (reduces vanishing gradient problem)
+Tanh: $ \tanh(x) = \frac{e^x - e^{-x}}{e^x &#43; e^{-x}} $ (zero-centered outputs)
+
+
+
+1-D Non-Linearly Separable Data
+
+Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold.
+Estimating probability: The probability of $Y=1$ at a given point is computed using a small surrounding window.
+The goal is to find a function that can model $P(Y=1 | X)$.
+
+Estimating the Model
+
+A sigmoid perceptron with a single input can approximate the posterior probability of a class given input:
+$$ P(Y=1 | X) = \sigma(WX &#43; b) $$
+Training is performed using gradient descent to optimize parameters $W$ and $b$.
+
+Maximum Likelihood Estimation (MLE)
+
+MLE minimizes the KL divergence between the desired and actual output.
+The loss function is derived from likelihood principles:
+$$ L(\theta) = -\sum_{i} y_i \log P(Y_i | X_i, \theta) &#43; (1 - y_i) \log(1 - P(Y_i | X_i, \theta)) $$
+Requires gradient descent for optimization.
+
+Network Structure
+
+The final neuron in the network acts as a linear classifier on the transformed data.
+The network transforms non-linear data into linearly separable feature space.
+Feature extractor layers convert input space $X$ into feature space $Y$ where classes are separable.
+Feature extraction layers include convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers.
+
+Autoencoder (AE)
+
+Definition: A neural network that copies its input to its output.
+
+Encoder: $h = f(x)$
+Decoder: $r = g(h)$
+
+
+Used for dimensionality reduction and feature extraction.
+Applications:
+
+Image compression
+Feature extraction for classification
+Denoising corrupted signals
+
+
+
+Linear vs. Non-Linear Autoencoders
+
+Linear AE minimizes squared reconstruction error (like PCA).
+Non-Linear AE finds a non-linear manifold that best represents the data.
+Loss function for reconstruction:
+$$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$
+
+Deep Autoencoder
+
+Multi-layer Autoencoders capture more complex structures.
+Trained using Restricted Boltzmann Machines (RBMs) followed by fine-tuning with backpropagation.
+Layer-wise pretraining is often used to initialize deep autoencoders before fine-tuning.
+
+Avoiding Trivial Identity Mapping
+Undercomplete Autoencoders
+
+Restrict $h$ to lower dimension than $x$.
+Loss function:
+$$ L(x, g(f(x))) $$
+Non-linear encoders extract useful features beyond PCA.
+
+Overcomplete Autoencoders
+
+Higher dimensional $h$ may lead to trivial identity mapping.
+Regularization techniques:
+
+Sparse AE: Encourages sparsity.
+Denoising AE: Recovers corrupted input.
+Contractive AE: Encourages robustness to perturbations.
+
+
+
+Variational Autoencoder (VAE)
+
+Imposes a constraint on the latent variable $z$.
+Ensures $z$ follows a Gaussian distribution:
+$$ p(z) = \mathcal{N}(0, I) $$
+Uses reparameterization trick to enable backpropagation:
+$$ z = \mu &#43; \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I) $$
+
+VAE Loss Function
+
+Combination of reconstruction loss and KL divergence loss:
+$$ L = \mathbb{E}[\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$
+KL divergence ensures that the latent variable follows a Gaussian distribution:
+$$ D_{KL}(q(z|x) || p(z)) = \frac{1}{2} \sum \left( \sigma^2 &#43; \mu^2 - 1 - \log \sigma^2 \right) $$
+
+Gaussian Mixture Models (GMM)
+
+Used for modeling complex distributions as a combination of Gaussian distributions.
+Objective: Learn means, variances, and mixing probabilities.
+EM Algorithm is commonly used for training GMMs.
+
+Generative Models
+
+Neural networks can be used as generative models to learn probability distributions.
+Examples:
+
+Variational Autoencoders (VAEs)
+Generative Adversarial Networks (GANs)
+Diffusion Models
+
+
+Applications include image generation, text synthesis, and semantic hashing.
+
+Applications of Autoencoders
+
+Dimensionality reduction
+Feature learning for classification
+Image retrieval using binary codes (semantic hashing)
+Data denoising
+Anomaly detection in cybersecurity and healthcare
+
+Conclusion
+
+Autoencoders provide powerful tools for representation learning.
+VAEs extend AE capabilities by enabling probabilistic data generation.
+Regularization techniques ensure meaningful feature extraction.
+Generative models play a crucial role in modern AI applications.
+">
+<meta name="author" content="">
+<link rel="canonical" href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/">
+<link crossorigin="anonymous" href="/rnn_class/assets/css/stylesheet.41696966e8df279036a27475a76b05b7e8c7617949cab3fec7496401d66c1c47.css" integrity="sha256-QWlpZujfJ5A2onR1p2sFt&#43;jHYXlJyrP&#43;x0lkAdZsHEc=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://felipecordero.github.io/rnn_class/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://felipecordero.github.io/rnn_class/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://felipecordero.github.io/rnn_class/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://felipecordero.github.io/rnn_class/apple-touch-icon.png">
+<link rel="mask-icon" href="https://felipecordero.github.io/rnn_class/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/">
+  <meta property="og:site_name" content="RNN Class">
+  <meta property="og:title" content="Chapter 4">
+  <meta property="og:description" content=" Midterm Exam Summary Neural Networks Overview Neural networks are universal approximators that can model Boolean, categorical, or real-valued functions. Capable of pattern recognition in static inputs, time-series, and sequences. Training is required for prediction. Neural networks consist of multiple layers: Input Layer: Accepts raw data. Hidden Layers: Extracts features through weighted connections. Output Layer: Produces final prediction or classification. Common activation functions: Sigmoid: $ \sigma(x) = \frac{1}{1 &#43; e^{-x}} $ (good for probabilities) ReLU: $ f(x) = \max(0, x) $ (reduces vanishing gradient problem) Tanh: $ \tanh(x) = \frac{e^x - e^{-x}}{e^x &#43; e^{-x}} $ (zero-centered outputs) 1-D Non-Linearly Separable Data Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold. Estimating probability: The probability of $Y=1$ at a given point is computed using a small surrounding window. The goal is to find a function that can model $P(Y=1 | X)$. Estimating the Model A sigmoid perceptron with a single input can approximate the posterior probability of a class given input: $$ P(Y=1 | X) = \sigma(WX &#43; b) $$ Training is performed using gradient descent to optimize parameters $W$ and $b$. Maximum Likelihood Estimation (MLE) MLE minimizes the KL divergence between the desired and actual output. The loss function is derived from likelihood principles: $$ L(\theta) = -\sum_{i} y_i \log P(Y_i | X_i, \theta) &#43; (1 - y_i) \log(1 - P(Y_i | X_i, \theta)) $$ Requires gradient descent for optimization. Network Structure The final neuron in the network acts as a linear classifier on the transformed data. The network transforms non-linear data into linearly separable feature space. Feature extractor layers convert input space $X$ into feature space $Y$ where classes are separable. Feature extraction layers include convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers. Autoencoder (AE) Definition: A neural network that copies its input to its output. Encoder: $h = f(x)$ Decoder: $r = g(h)$ Used for dimensionality reduction and feature extraction. Applications: Image compression Feature extraction for classification Denoising corrupted signals Linear vs. Non-Linear Autoencoders Linear AE minimizes squared reconstruction error (like PCA). Non-Linear AE finds a non-linear manifold that best represents the data. Loss function for reconstruction: $$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$ Deep Autoencoder Multi-layer Autoencoders capture more complex structures. Trained using Restricted Boltzmann Machines (RBMs) followed by fine-tuning with backpropagation. Layer-wise pretraining is often used to initialize deep autoencoders before fine-tuning. Avoiding Trivial Identity Mapping Undercomplete Autoencoders Restrict $h$ to lower dimension than $x$. Loss function: $$ L(x, g(f(x))) $$ Non-linear encoders extract useful features beyond PCA. Overcomplete Autoencoders Higher dimensional $h$ may lead to trivial identity mapping. Regularization techniques: Sparse AE: Encourages sparsity. Denoising AE: Recovers corrupted input. Contractive AE: Encourages robustness to perturbations. Variational Autoencoder (VAE) Imposes a constraint on the latent variable $z$. Ensures $z$ follows a Gaussian distribution: $$ p(z) = \mathcal{N}(0, I) $$ Uses reparameterization trick to enable backpropagation: $$ z = \mu &#43; \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I) $$ VAE Loss Function Combination of reconstruction loss and KL divergence loss: $$ L = \mathbb{E}[\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$ KL divergence ensures that the latent variable follows a Gaussian distribution: $$ D_{KL}(q(z|x) || p(z)) = \frac{1}{2} \sum \left( \sigma^2 &#43; \mu^2 - 1 - \log \sigma^2 \right) $$ Gaussian Mixture Models (GMM) Used for modeling complex distributions as a combination of Gaussian distributions. Objective: Learn means, variances, and mixing probabilities. EM Algorithm is commonly used for training GMMs. Generative Models Neural networks can be used as generative models to learn probability distributions. Examples: Variational Autoencoders (VAEs) Generative Adversarial Networks (GANs) Diffusion Models Applications include image generation, text synthesis, and semantic hashing. Applications of Autoencoders Dimensionality reduction Feature learning for classification Image retrieval using binary codes (semantic hashing) Data denoising Anomaly detection in cybersecurity and healthcare Conclusion Autoencoders provide powerful tools for representation learning. VAEs extend AE capabilities by enabling probabilistic data generation. Regularization techniques ensure meaningful feature extraction. Generative models play a crucial role in modern AI applications. ">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="midterm_summary">
+    <meta property="article:published_time" content="2025-03-10T13:12:43-04:00">
+    <meta property="article:modified_time" content="2025-03-10T13:12:43-04:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4">
+<meta name="twitter:description" content="
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    Midterm Exam Summary
+Neural Networks Overview
+
+Neural networks are universal approximators that can model Boolean, categorical, or real-valued functions.
+Capable of pattern recognition in static inputs, time-series, and sequences.
+Training is required for prediction.
+Neural networks consist of multiple layers:
+
+Input Layer: Accepts raw data.
+Hidden Layers: Extracts features through weighted connections.
+Output Layer: Produces final prediction or classification.
+
+
+Common activation functions:
+
+Sigmoid: $ \sigma(x) = \frac{1}{1 &#43; e^{-x}} $ (good for probabilities)
+ReLU: $ f(x) = \max(0, x) $ (reduces vanishing gradient problem)
+Tanh: $ \tanh(x) = \frac{e^x - e^{-x}}{e^x &#43; e^{-x}} $ (zero-centered outputs)
+
+
+
+1-D Non-Linearly Separable Data
+
+Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold.
+Estimating probability: The probability of $Y=1$ at a given point is computed using a small surrounding window.
+The goal is to find a function that can model $P(Y=1 | X)$.
+
+Estimating the Model
+
+A sigmoid perceptron with a single input can approximate the posterior probability of a class given input:
+$$ P(Y=1 | X) = \sigma(WX &#43; b) $$
+Training is performed using gradient descent to optimize parameters $W$ and $b$.
+
+Maximum Likelihood Estimation (MLE)
+
+MLE minimizes the KL divergence between the desired and actual output.
+The loss function is derived from likelihood principles:
+$$ L(\theta) = -\sum_{i} y_i \log P(Y_i | X_i, \theta) &#43; (1 - y_i) \log(1 - P(Y_i | X_i, \theta)) $$
+Requires gradient descent for optimization.
+
+Network Structure
+
+The final neuron in the network acts as a linear classifier on the transformed data.
+The network transforms non-linear data into linearly separable feature space.
+Feature extractor layers convert input space $X$ into feature space $Y$ where classes are separable.
+Feature extraction layers include convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers.
+
+Autoencoder (AE)
+
+Definition: A neural network that copies its input to its output.
+
+Encoder: $h = f(x)$
+Decoder: $r = g(h)$
+
+
+Used for dimensionality reduction and feature extraction.
+Applications:
+
+Image compression
+Feature extraction for classification
+Denoising corrupted signals
+
+
+
+Linear vs. Non-Linear Autoencoders
+
+Linear AE minimizes squared reconstruction error (like PCA).
+Non-Linear AE finds a non-linear manifold that best represents the data.
+Loss function for reconstruction:
+$$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$
+
+Deep Autoencoder
+
+Multi-layer Autoencoders capture more complex structures.
+Trained using Restricted Boltzmann Machines (RBMs) followed by fine-tuning with backpropagation.
+Layer-wise pretraining is often used to initialize deep autoencoders before fine-tuning.
+
+Avoiding Trivial Identity Mapping
+Undercomplete Autoencoders
+
+Restrict $h$ to lower dimension than $x$.
+Loss function:
+$$ L(x, g(f(x))) $$
+Non-linear encoders extract useful features beyond PCA.
+
+Overcomplete Autoencoders
+
+Higher dimensional $h$ may lead to trivial identity mapping.
+Regularization techniques:
+
+Sparse AE: Encourages sparsity.
+Denoising AE: Recovers corrupted input.
+Contractive AE: Encourages robustness to perturbations.
+
+
+
+Variational Autoencoder (VAE)
+
+Imposes a constraint on the latent variable $z$.
+Ensures $z$ follows a Gaussian distribution:
+$$ p(z) = \mathcal{N}(0, I) $$
+Uses reparameterization trick to enable backpropagation:
+$$ z = \mu &#43; \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I) $$
+
+VAE Loss Function
+
+Combination of reconstruction loss and KL divergence loss:
+$$ L = \mathbb{E}[\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$
+KL divergence ensures that the latent variable follows a Gaussian distribution:
+$$ D_{KL}(q(z|x) || p(z)) = \frac{1}{2} \sum \left( \sigma^2 &#43; \mu^2 - 1 - \log \sigma^2 \right) $$
+
+Gaussian Mixture Models (GMM)
+
+Used for modeling complex distributions as a combination of Gaussian distributions.
+Objective: Learn means, variances, and mixing probabilities.
+EM Algorithm is commonly used for training GMMs.
+
+Generative Models
+
+Neural networks can be used as generative models to learn probability distributions.
+Examples:
+
+Variational Autoencoders (VAEs)
+Generative Adversarial Networks (GANs)
+Diffusion Models
+
+
+Applications include image generation, text synthesis, and semantic hashing.
+
+Applications of Autoencoders
+
+Dimensionality reduction
+Feature learning for classification
+Image retrieval using binary codes (semantic hashing)
+Data denoising
+Anomaly detection in cybersecurity and healthcare
+
+Conclusion
+
+Autoencoders provide powerful tools for representation learning.
+VAEs extend AE capabilities by enabling probabilistic data generation.
+Regularization techniques ensure meaningful feature extraction.
+Generative models play a crucial role in modern AI applications.
+">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Midterm_summaries",
+      "item": "https://felipecordero.github.io/rnn_class/midterm_summary/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Chapter 4",
+      "item": "https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chapter 4",
+  "name": "Chapter 4",
+  "description": " Midterm Exam Summary Neural Networks Overview Neural networks are universal approximators that can model Boolean, categorical, or real-valued functions. Capable of pattern recognition in static inputs, time-series, and sequences. Training is required for prediction. Neural networks consist of multiple layers: Input Layer: Accepts raw data. Hidden Layers: Extracts features through weighted connections. Output Layer: Produces final prediction or classification. Common activation functions: Sigmoid: $ \\sigma(x) = \\frac{1}{1 + e^{-x}} $ (good for probabilities) ReLU: $ f(x) = \\max(0, x) $ (reduces vanishing gradient problem) Tanh: $ \\tanh(x) = \\frac{e^x - e^{-x}}{e^x + e^{-x}} $ (zero-centered outputs) 1-D Non-Linearly Separable Data Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold. Estimating probability: The probability of $Y=1$ at a given point is computed using a small surrounding window. The goal is to find a function that can model $P(Y=1 | X)$. Estimating the Model A sigmoid perceptron with a single input can approximate the posterior probability of a class given input: $$ P(Y=1 | X) = \\sigma(WX + b) $$ Training is performed using gradient descent to optimize parameters $W$ and $b$. Maximum Likelihood Estimation (MLE) MLE minimizes the KL divergence between the desired and actual output. The loss function is derived from likelihood principles: $$ L(\\theta) = -\\sum_{i} y_i \\log P(Y_i | X_i, \\theta) + (1 - y_i) \\log(1 - P(Y_i | X_i, \\theta)) $$ Requires gradient descent for optimization. Network Structure The final neuron in the network acts as a linear classifier on the transformed data. The network transforms non-linear data into linearly separable feature space. Feature extractor layers convert input space $X$ into feature space $Y$ where classes are separable. Feature extraction layers include convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers. Autoencoder (AE) Definition: A neural network that copies its input to its output. Encoder: $h = f(x)$ Decoder: $r = g(h)$ Used for dimensionality reduction and feature extraction. Applications: Image compression Feature extraction for classification Denoising corrupted signals Linear vs. Non-Linear Autoencoders Linear AE minimizes squared reconstruction error (like PCA). Non-Linear AE finds a non-linear manifold that best represents the data. Loss function for reconstruction: $$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$ Deep Autoencoder Multi-layer Autoencoders capture more complex structures. Trained using Restricted Boltzmann Machines (RBMs) followed by fine-tuning with backpropagation. Layer-wise pretraining is often used to initialize deep autoencoders before fine-tuning. Avoiding Trivial Identity Mapping Undercomplete Autoencoders Restrict $h$ to lower dimension than $x$. Loss function: $$ L(x, g(f(x))) $$ Non-linear encoders extract useful features beyond PCA. Overcomplete Autoencoders Higher dimensional $h$ may lead to trivial identity mapping. Regularization techniques: Sparse AE: Encourages sparsity. Denoising AE: Recovers corrupted input. Contractive AE: Encourages robustness to perturbations. Variational Autoencoder (VAE) Imposes a constraint on the latent variable $z$. Ensures $z$ follows a Gaussian distribution: $$ p(z) = \\mathcal{N}(0, I) $$ Uses reparameterization trick to enable backpropagation: $$ z = \\mu + \\sigma \\cdot \\epsilon, \\quad \\epsilon \\sim \\mathcal{N}(0, I) $$ VAE Loss Function Combination of reconstruction loss and KL divergence loss: $$ L = \\mathbb{E}[\\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$ KL divergence ensures that the latent variable follows a Gaussian distribution: $$ D_{KL}(q(z|x) || p(z)) = \\frac{1}{2} \\sum \\left( \\sigma^2 + \\mu^2 - 1 - \\log \\sigma^2 \\right) $$ Gaussian Mixture Models (GMM) Used for modeling complex distributions as a combination of Gaussian distributions. Objective: Learn means, variances, and mixing probabilities. EM Algorithm is commonly used for training GMMs. Generative Models Neural networks can be used as generative models to learn probability distributions. Examples: Variational Autoencoders (VAEs) Generative Adversarial Networks (GANs) Diffusion Models Applications include image generation, text synthesis, and semantic hashing. Applications of Autoencoders Dimensionality reduction Feature learning for classification Image retrieval using binary codes (semantic hashing) Data denoising Anomaly detection in cybersecurity and healthcare Conclusion Autoencoders provide powerful tools for representation learning. VAEs extend AE capabilities by enabling probabilistic data generation. Regularization techniques ensure meaningful feature extraction. Generative models play a crucial role in modern AI applications. ",
+  "keywords": [
+    
+  ],
+  "articleBody": " Midterm Exam Summary Neural Networks Overview Neural networks are universal approximators that can model Boolean, categorical, or real-valued functions. Capable of pattern recognition in static inputs, time-series, and sequences. Training is required for prediction. Neural networks consist of multiple layers: Input Layer: Accepts raw data. Hidden Layers: Extracts features through weighted connections. Output Layer: Produces final prediction or classification. Common activation functions: Sigmoid: $ \\sigma(x) = \\frac{1}{1 + e^{-x}} $ (good for probabilities) ReLU: $ f(x) = \\max(0, x) $ (reduces vanishing gradient problem) Tanh: $ \\tanh(x) = \\frac{e^x - e^{-x}}{e^x + e^{-x}} $ (zero-centered outputs) 1-D Non-Linearly Separable Data Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold. Estimating probability: The probability of $Y=1$ at a given point is computed using a small surrounding window. The goal is to find a function that can model $P(Y=1 | X)$. Estimating the Model A sigmoid perceptron with a single input can approximate the posterior probability of a class given input: $$ P(Y=1 | X) = \\sigma(WX + b) $$ Training is performed using gradient descent to optimize parameters $W$ and $b$. Maximum Likelihood Estimation (MLE) MLE minimizes the KL divergence between the desired and actual output. The loss function is derived from likelihood principles: $$ L(\\theta) = -\\sum_{i} y_i \\log P(Y_i | X_i, \\theta) + (1 - y_i) \\log(1 - P(Y_i | X_i, \\theta)) $$ Requires gradient descent for optimization. Network Structure The final neuron in the network acts as a linear classifier on the transformed data. The network transforms non-linear data into linearly separable feature space. Feature extractor layers convert input space $X$ into feature space $Y$ where classes are separable. Feature extraction layers include convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers. Autoencoder (AE) Definition: A neural network that copies its input to its output. Encoder: $h = f(x)$ Decoder: $r = g(h)$ Used for dimensionality reduction and feature extraction. Applications: Image compression Feature extraction for classification Denoising corrupted signals Linear vs. Non-Linear Autoencoders Linear AE minimizes squared reconstruction error (like PCA). Non-Linear AE finds a non-linear manifold that best represents the data. Loss function for reconstruction: $$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$ Deep Autoencoder Multi-layer Autoencoders capture more complex structures. Trained using Restricted Boltzmann Machines (RBMs) followed by fine-tuning with backpropagation. Layer-wise pretraining is often used to initialize deep autoencoders before fine-tuning. Avoiding Trivial Identity Mapping Undercomplete Autoencoders Restrict $h$ to lower dimension than $x$. Loss function: $$ L(x, g(f(x))) $$ Non-linear encoders extract useful features beyond PCA. Overcomplete Autoencoders Higher dimensional $h$ may lead to trivial identity mapping. Regularization techniques: Sparse AE: Encourages sparsity. Denoising AE: Recovers corrupted input. Contractive AE: Encourages robustness to perturbations. Variational Autoencoder (VAE) Imposes a constraint on the latent variable $z$. Ensures $z$ follows a Gaussian distribution: $$ p(z) = \\mathcal{N}(0, I) $$ Uses reparameterization trick to enable backpropagation: $$ z = \\mu + \\sigma \\cdot \\epsilon, \\quad \\epsilon \\sim \\mathcal{N}(0, I) $$ VAE Loss Function Combination of reconstruction loss and KL divergence loss: $$ L = \\mathbb{E}[\\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$ KL divergence ensures that the latent variable follows a Gaussian distribution: $$ D_{KL}(q(z|x) || p(z)) = \\frac{1}{2} \\sum \\left( \\sigma^2 + \\mu^2 - 1 - \\log \\sigma^2 \\right) $$ Gaussian Mixture Models (GMM) Used for modeling complex distributions as a combination of Gaussian distributions. Objective: Learn means, variances, and mixing probabilities. EM Algorithm is commonly used for training GMMs. Generative Models Neural networks can be used as generative models to learn probability distributions. Examples: Variational Autoencoders (VAEs) Generative Adversarial Networks (GANs) Diffusion Models Applications include image generation, text synthesis, and semantic hashing. Applications of Autoencoders Dimensionality reduction Feature learning for classification Image retrieval using binary codes (semantic hashing) Data denoising Anomaly detection in cybersecurity and healthcare Conclusion Autoencoders provide powerful tools for representation learning. VAEs extend AE capabilities by enabling probabilistic data generation. Regularization techniques ensure meaningful feature extraction. Generative models play a crucial role in modern AI applications. ",
+  "wordCount" : "661",
+  "inLanguage": "en",
+  "datePublished": "2025-03-10T13:12:43-04:00",
+  "dateModified": "2025-03-10T13:12:43-04:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "RNN Class",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://felipecordero.github.io/rnn_class/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://felipecordero.github.io/rnn_class/" accesskey="h" title="RNN Class (Alt + H)">RNN Class</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-1/" title="Chapter 1">
+                    <span>Chapter 1</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-2/" title="Chapter 2">
+                    <span>Chapter 2</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-3/" title="Chapter 3">
+                    <span>Chapter 3</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/" title="Chapter 4">
+                    <span class="active">Chapter 4</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Chapter 4
+    </h1>
+    <div class="post-meta"><span title='2025-03-10 13:12:43 -0400 EDT'>March 10, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("pre code.language-math").forEach((block) => {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes("\n") ? "\\[" + mathContent + "\\]" : "\\(" + mathContent + "\\)";
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+</script>
+
+
+
+
+    
+    <h1 id="midterm-exam-summary">Midterm Exam Summary<a hidden class="anchor" aria-hidden="true" href="#midterm-exam-summary">#</a></h1>
+<h2 id="neural-networks-overview">Neural Networks Overview<a hidden class="anchor" aria-hidden="true" href="#neural-networks-overview">#</a></h2>
+<ul>
+<li>Neural networks are <strong>universal approximators</strong> that can model Boolean, categorical, or real-valued functions.</li>
+<li>Capable of pattern recognition in static inputs, time-series, and sequences.</li>
+<li>Training is required for prediction.</li>
+<li>Neural networks consist of multiple layers:
+<ul>
+<li><strong>Input Layer</strong>: Accepts raw data.</li>
+<li><strong>Hidden Layers</strong>: Extracts features through weighted connections.</li>
+<li><strong>Output Layer</strong>: Produces final prediction or classification.</li>
+</ul>
+</li>
+<li>Common activation functions:
+<ul>
+<li><strong>Sigmoid</strong>: $ \sigma(x) = \frac{1}{1 + e^{-x}} $ (good for probabilities)</li>
+<li><strong>ReLU</strong>: $ f(x) = \max(0, x) $ (reduces vanishing gradient problem)</li>
+<li><strong>Tanh</strong>: $ \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} $ (zero-centered outputs)</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-d-non-linearly-separable-data">1-D Non-Linearly Separable Data<a hidden class="anchor" aria-hidden="true" href="#1-d-non-linearly-separable-data">#</a></h2>
+<ul>
+<li>Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold.</li>
+<li><strong>Estimating probability</strong>: The probability of $Y=1$ at a given point is computed using a small surrounding window.</li>
+<li>The goal is to find a function that can model $P(Y=1 | X)$.</li>
+</ul>
+<h2 id="estimating-the-model">Estimating the Model<a hidden class="anchor" aria-hidden="true" href="#estimating-the-model">#</a></h2>
+<ul>
+<li>A <strong>sigmoid perceptron</strong> with a single input can approximate the posterior probability of a class given input:
+$$ P(Y=1 | X) = \sigma(WX + b) $$</li>
+<li>Training is performed using <strong>gradient descent</strong> to optimize parameters $W$ and $b$.</li>
+</ul>
+<h2 id="maximum-likelihood-estimation-mle">Maximum Likelihood Estimation (MLE)<a hidden class="anchor" aria-hidden="true" href="#maximum-likelihood-estimation-mle">#</a></h2>
+<ul>
+<li>MLE minimizes the <strong>KL divergence</strong> between the desired and actual output.</li>
+<li>The loss function is derived from likelihood principles:
+$$ L(\theta) = -\sum_{i} y_i \log P(Y_i | X_i, \theta) + (1 - y_i) \log(1 - P(Y_i | X_i, \theta)) $$</li>
+<li>Requires <strong>gradient descent</strong> for optimization.</li>
+</ul>
+<h2 id="network-structure">Network Structure<a hidden class="anchor" aria-hidden="true" href="#network-structure">#</a></h2>
+<ul>
+<li>The final neuron in the network acts as a <strong>linear classifier</strong> on the transformed data.</li>
+<li>The network <strong>transforms non-linear data</strong> into linearly separable feature space.</li>
+<li><strong>Feature extractor layers</strong> convert input space $X$ into feature space $Y$ where classes are separable.</li>
+<li>Feature extraction layers include <strong>convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers</strong>.</li>
+</ul>
+<h2 id="autoencoder-ae">Autoencoder (AE)<a hidden class="anchor" aria-hidden="true" href="#autoencoder-ae">#</a></h2>
+<ul>
+<li><strong>Definition</strong>: A neural network that copies its input to its output.
+<ul>
+<li><strong>Encoder</strong>: $h = f(x)$</li>
+<li><strong>Decoder</strong>: $r = g(h)$</li>
+</ul>
+</li>
+<li>Used for <strong>dimensionality reduction</strong> and feature extraction.</li>
+<li>Applications:
+<ul>
+<li>Image compression</li>
+<li>Feature extraction for classification</li>
+<li>Denoising corrupted signals</li>
+</ul>
+</li>
+</ul>
+<h2 id="linear-vs-non-linear-autoencoders">Linear vs. Non-Linear Autoencoders<a hidden class="anchor" aria-hidden="true" href="#linear-vs-non-linear-autoencoders">#</a></h2>
+<ul>
+<li>Linear AE minimizes squared reconstruction error (like PCA).</li>
+<li>Non-Linear AE finds a <strong>non-linear manifold</strong> that best represents the data.</li>
+<li>Loss function for reconstruction:
+$$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$</li>
+</ul>
+<h2 id="deep-autoencoder">Deep Autoencoder<a hidden class="anchor" aria-hidden="true" href="#deep-autoencoder">#</a></h2>
+<ul>
+<li><strong>Multi-layer Autoencoders</strong> capture more complex structures.</li>
+<li>Trained using <strong>Restricted Boltzmann Machines (RBMs)</strong> followed by <strong>fine-tuning with backpropagation</strong>.</li>
+<li><strong>Layer-wise pretraining</strong> is often used to initialize deep autoencoders before fine-tuning.</li>
+</ul>
+<h2 id="avoiding-trivial-identity-mapping">Avoiding Trivial Identity Mapping<a hidden class="anchor" aria-hidden="true" href="#avoiding-trivial-identity-mapping">#</a></h2>
+<h3 id="undercomplete-autoencoders">Undercomplete Autoencoders<a hidden class="anchor" aria-hidden="true" href="#undercomplete-autoencoders">#</a></h3>
+<ul>
+<li>Restrict $h$ to lower dimension than $x$.</li>
+<li>Loss function:
+$$ L(x, g(f(x))) $$</li>
+<li>Non-linear encoders extract useful features beyond PCA.</li>
+</ul>
+<h3 id="overcomplete-autoencoders">Overcomplete Autoencoders<a hidden class="anchor" aria-hidden="true" href="#overcomplete-autoencoders">#</a></h3>
+<ul>
+<li>Higher dimensional $h$ may lead to trivial identity mapping.</li>
+<li>Regularization techniques:
+<ul>
+<li><strong>Sparse AE</strong>: Encourages sparsity.</li>
+<li><strong>Denoising AE</strong>: Recovers corrupted input.</li>
+<li><strong>Contractive AE</strong>: Encourages robustness to perturbations.</li>
+</ul>
+</li>
+</ul>
+<h2 id="variational-autoencoder-vae">Variational Autoencoder (VAE)<a hidden class="anchor" aria-hidden="true" href="#variational-autoencoder-vae">#</a></h2>
+<ul>
+<li>Imposes a constraint on the latent variable $z$.</li>
+<li>Ensures $z$ follows a <strong>Gaussian distribution</strong>:
+$$ p(z) = \mathcal{N}(0, I) $$</li>
+<li>Uses <strong>reparameterization trick</strong> to enable backpropagation:
+$$ z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I) $$</li>
+</ul>
+<h2 id="vae-loss-function">VAE Loss Function<a hidden class="anchor" aria-hidden="true" href="#vae-loss-function">#</a></h2>
+<ul>
+<li>Combination of <strong>reconstruction loss</strong> and <strong>KL divergence loss</strong>:
+$$ L = \mathbb{E}[\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$</li>
+<li>KL divergence ensures that the latent variable follows a Gaussian distribution:
+$$ D_{KL}(q(z|x) || p(z)) = \frac{1}{2} \sum \left( \sigma^2 + \mu^2 - 1 - \log \sigma^2 \right) $$</li>
+</ul>
+<h2 id="gaussian-mixture-models-gmm">Gaussian Mixture Models (GMM)<a hidden class="anchor" aria-hidden="true" href="#gaussian-mixture-models-gmm">#</a></h2>
+<ul>
+<li>Used for modeling complex distributions as a combination of Gaussian distributions.</li>
+<li>Objective: Learn <strong>means, variances, and mixing probabilities</strong>.</li>
+<li>EM Algorithm is commonly used for training GMMs.</li>
+</ul>
+<h2 id="generative-models">Generative Models<a hidden class="anchor" aria-hidden="true" href="#generative-models">#</a></h2>
+<ul>
+<li>Neural networks can be used as <strong>generative models</strong> to learn probability distributions.</li>
+<li>Examples:
+<ul>
+<li>Variational Autoencoders (VAEs)</li>
+<li>Generative Adversarial Networks (GANs)</li>
+<li>Diffusion Models</li>
+</ul>
+</li>
+<li>Applications include <strong>image generation, text synthesis, and semantic hashing</strong>.</li>
+</ul>
+<h2 id="applications-of-autoencoders">Applications of Autoencoders<a hidden class="anchor" aria-hidden="true" href="#applications-of-autoencoders">#</a></h2>
+<ol>
+<li><strong>Dimensionality reduction</strong></li>
+<li><strong>Feature learning for classification</strong></li>
+<li><strong>Image retrieval using binary codes</strong> (semantic hashing)</li>
+<li><strong>Data denoising</strong></li>
+<li><strong>Anomaly detection</strong> in cybersecurity and healthcare</li>
+</ol>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<ul>
+<li>Autoencoders provide powerful tools for representation learning.</li>
+<li>VAEs extend AE capabilities by enabling <strong>probabilistic data generation</strong>.</li>
+<li>Regularization techniques ensure meaningful feature extraction.</li>
+<li><strong>Generative models</strong> play a crucial role in modern AI applications.</li>
+</ul>
+
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://felipecordero.github.io/rnn_class/">RNN Class</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Midterm_summaries on RNN Class</title>
+    <link>https://felipecordero.github.io/rnn_class/midterm_summary/</link>
+    <description>Recent content in Midterm_summaries on RNN Class</description>
+    <generator>Hugo -- 0.145.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Mar 2025 13:12:43 -0400</lastBuildDate>
+    <atom:link href="https://felipecordero.github.io/rnn_class/midterm_summary/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Chapter 2</title>
+      <link>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-2/</link>
+      <pubDate>Mon, 10 Mar 2025 13:12:43 -0400</pubDate>
+      <guid>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-2/</guid>
+      <description>&lt;script src=&#34;https://polyfill.io/v3/polyfill.min.js?features=es6&#34;&gt;&lt;/script&gt;
+&lt;script id=&#34;MathJax-script&#34; async src=&#34;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&#34;&gt;&lt;/script&gt;
+
+&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css&#34;&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js&#34;&gt;&lt;/script&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js&#34;
+    onload=&#34;renderMathInElement(document.body);&#34;&gt;&lt;/script&gt;
+
+
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
+    document.querySelectorAll(&#34;pre code.language-math&#34;).forEach((block) =&gt; {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes(&#34;\n&#34;) ? &#34;\\[&#34; + mathContent + &#34;\\]&#34; : &#34;\\(&#34; + mathContent + &#34;\\)&#34;;
+        const wrapper = document.createElement(&#34;div&#34;);
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+&lt;/script&gt;
+
+
+
+
+    
+    &lt;h3 id=&#34;midterm-exam-summary-probabilistic-graphical-models-pgms&#34;&gt;&lt;strong&gt;Midterm Exam Summary: Probabilistic Graphical Models (PGMs)&lt;/strong&gt;&lt;/h3&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-introduction-to-probabilistic-graphical-models-pgms&#34;&gt;&lt;strong&gt;1. Introduction to Probabilistic Graphical Models (PGMs)&lt;/strong&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;PGMs provide a &lt;strong&gt;declarative representation&lt;/strong&gt; of our understanding of the world.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key Benefits&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Can handle &lt;strong&gt;uncertainty&lt;/strong&gt; (partial/noisy observations, missing data).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Separate knowledge from reasoning&lt;/strong&gt;—avoiding special-purpose algorithms.&lt;/li&gt;
+&lt;li&gt;Allow for different &lt;strong&gt;inference algorithms&lt;/strong&gt; on the same model.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;types-of-pgms&#34;&gt;&lt;strong&gt;Types of PGMs:&lt;/strong&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Directed Graphs (Bayesian Networks)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Undirected Graphs (Markov Random Fields)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-bayesian-networks-bns&#34;&gt;&lt;strong&gt;2. Bayesian Networks (BNs)&lt;/strong&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Definition&lt;/strong&gt;: A Bayesian Network is a &lt;strong&gt;Directed Acyclic Graph (DAG)&lt;/strong&gt; that provides a compact factorized representation of a joint probability distribution.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Components&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Nodes&lt;/strong&gt;: Represent &lt;strong&gt;random variables&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edges&lt;/strong&gt;: Represent &lt;strong&gt;causal influences&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Factorization&lt;/strong&gt; follows the &lt;strong&gt;chain rule&lt;/strong&gt;:
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;P(X_1, X_2, ..., X_n) = \prod_{i} P(X_i | Parents(X_i))
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;bayesian-networks---example&#34;&gt;&lt;strong&gt;Bayesian Networks - Example&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A student&amp;rsquo;s grade depends on &lt;strong&gt;intelligence, course difficulty, SAT score, and recommendation letter&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Example of a Conditional Probability Table (CPT):
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;P(X_n | Z_n = k) = P(X_n; \mu_k, \Sigma_k)
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;inference-in-bayesian-networks&#34;&gt;&lt;strong&gt;Inference in Bayesian Networks&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Exact Inference&lt;/strong&gt;:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Chapter 3</title>
+      <link>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-3/</link>
+      <pubDate>Mon, 10 Mar 2025 13:12:43 -0400</pubDate>
+      <guid>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-3/</guid>
+      <description>&lt;script src=&#34;https://polyfill.io/v3/polyfill.min.js?features=es6&#34;&gt;&lt;/script&gt;
+&lt;script id=&#34;MathJax-script&#34; async src=&#34;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&#34;&gt;&lt;/script&gt;
+
+&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css&#34;&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js&#34;&gt;&lt;/script&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js&#34;
+    onload=&#34;renderMathInElement(document.body);&#34;&gt;&lt;/script&gt;
+
+
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
+    document.querySelectorAll(&#34;pre code.language-math&#34;).forEach((block) =&gt; {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes(&#34;\n&#34;) ? &#34;\\[&#34; + mathContent + &#34;\\]&#34; : &#34;\\(&#34; + mathContent + &#34;\\)&#34;;
+        const wrapper = document.createElement(&#34;div&#34;);
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+&lt;/script&gt;
+
+
+
+
+    
+    &lt;h1 id=&#34;chapter-3-deep-belief-network-dbn&#34;&gt;Chapter 3: Deep Belief Network (DBN)&lt;/h1&gt;
+&lt;h2 id=&#34;1-introduction-to-deep-belief-networks-dbn&#34;&gt;1. Introduction to Deep Belief Networks (DBN)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Deep Belief Networks (DBNs)&lt;/strong&gt; are generative models composed of &lt;strong&gt;multiple layers of hidden units&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;They are constructed using &lt;strong&gt;Restricted Boltzmann Machines (RBMs)&lt;/strong&gt;, which are stacked to form a deep structure.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RBMs&lt;/strong&gt; serve as the building blocks of DBNs and are a special type of &lt;strong&gt;Boltzmann Machines (BMs)&lt;/strong&gt;, which belong to the family of &lt;strong&gt;Markov Random Fields (MRFs)&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;boltzmann-machines-bms&#34;&gt;&lt;strong&gt;Boltzmann Machines (BMs)&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;Boltzmann Machine&lt;/strong&gt; is a &lt;strong&gt;stochastic neural network&lt;/strong&gt; consisting of symmetrically connected binary units.&lt;/li&gt;
+&lt;li&gt;It is used to &lt;strong&gt;learn probability distributions&lt;/strong&gt; over data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;restricted-boltzmann-machines-rbms&#34;&gt;&lt;strong&gt;Restricted Boltzmann Machines (RBMs)&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;RBMs are a &lt;strong&gt;special case of Boltzmann Machines&lt;/strong&gt; with a restricted architecture:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No intra-layer connections&lt;/strong&gt; (i.e., no connections between neurons in the same layer).&lt;/li&gt;
+&lt;li&gt;Composed of:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Visible units&lt;/strong&gt;: $ v \in {0,1}^D $&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hidden units&lt;/strong&gt;: $ h \in {0,1}^D $&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;why-use-dbns&#34;&gt;&lt;strong&gt;Why Use DBNs?&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DBNs solve the &lt;strong&gt;difficulty in training deep neural networks&lt;/strong&gt; by:
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Pretraining&lt;/strong&gt; each layer independently as an RBM.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using a greedy layer-wise training approach&lt;/strong&gt; to initialize deep networks efficiently.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Improving a lower bound on the likelihood&lt;/strong&gt; with each additional layer.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-restricted-boltzmann-machine-rbm&#34;&gt;2. Restricted Boltzmann Machine (RBM)&lt;/h2&gt;
+&lt;h3 id=&#34;structure-of-an-rbm&#34;&gt;&lt;strong&gt;Structure of an RBM&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;RBMs consist of:
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;visible layer&lt;/strong&gt; containing observed data.&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;hidden layer&lt;/strong&gt; capturing latent features.&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;weight matrix&lt;/strong&gt; ( W ) connecting visible and hidden units.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bias terms&lt;/strong&gt; ( a ) and ( b ) for visible and hidden layers, respectively.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;energy-function-of-an-rbm&#34;&gt;&lt;strong&gt;Energy Function of an RBM&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;The &lt;strong&gt;energy function&lt;/strong&gt; for an RBM is defined as:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Chapter 4</title>
+      <link>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/</link>
+      <pubDate>Mon, 10 Mar 2025 13:12:43 -0400</pubDate>
+      <guid>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-4/</guid>
+      <description>&lt;script src=&#34;https://polyfill.io/v3/polyfill.min.js?features=es6&#34;&gt;&lt;/script&gt;
+&lt;script id=&#34;MathJax-script&#34; async src=&#34;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&#34;&gt;&lt;/script&gt;
+
+&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css&#34;&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js&#34;&gt;&lt;/script&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js&#34;
+    onload=&#34;renderMathInElement(document.body);&#34;&gt;&lt;/script&gt;
+
+
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
+    document.querySelectorAll(&#34;pre code.language-math&#34;).forEach((block) =&gt; {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes(&#34;\n&#34;) ? &#34;\\[&#34; + mathContent + &#34;\\]&#34; : &#34;\\(&#34; + mathContent + &#34;\\)&#34;;
+        const wrapper = document.createElement(&#34;div&#34;);
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+&lt;/script&gt;
+
+
+
+
+    
+    &lt;h1 id=&#34;midterm-exam-summary&#34;&gt;Midterm Exam Summary&lt;/h1&gt;
+&lt;h2 id=&#34;neural-networks-overview&#34;&gt;Neural Networks Overview&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Neural networks are &lt;strong&gt;universal approximators&lt;/strong&gt; that can model Boolean, categorical, or real-valued functions.&lt;/li&gt;
+&lt;li&gt;Capable of pattern recognition in static inputs, time-series, and sequences.&lt;/li&gt;
+&lt;li&gt;Training is required for prediction.&lt;/li&gt;
+&lt;li&gt;Neural networks consist of multiple layers:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Input Layer&lt;/strong&gt;: Accepts raw data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hidden Layers&lt;/strong&gt;: Extracts features through weighted connections.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Output Layer&lt;/strong&gt;: Produces final prediction or classification.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Common activation functions:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Sigmoid&lt;/strong&gt;: $ \sigma(x) = \frac{1}{1 + e^{-x}} $ (good for probabilities)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ReLU&lt;/strong&gt;: $ f(x) = \max(0, x) $ (reduces vanishing gradient problem)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tanh&lt;/strong&gt;: $ \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} $ (zero-centered outputs)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1-d-non-linearly-separable-data&#34;&gt;1-D Non-Linearly Separable Data&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Consider a one-dimensional dataset where class labels cannot be separated by a simple threshold.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Estimating probability&lt;/strong&gt;: The probability of $Y=1$ at a given point is computed using a small surrounding window.&lt;/li&gt;
+&lt;li&gt;The goal is to find a function that can model $P(Y=1 | X)$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;estimating-the-model&#34;&gt;Estimating the Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;sigmoid perceptron&lt;/strong&gt; with a single input can approximate the posterior probability of a class given input:
+$$ P(Y=1 | X) = \sigma(WX + b) $$&lt;/li&gt;
+&lt;li&gt;Training is performed using &lt;strong&gt;gradient descent&lt;/strong&gt; to optimize parameters $W$ and $b$.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;maximum-likelihood-estimation-mle&#34;&gt;Maximum Likelihood Estimation (MLE)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;MLE minimizes the &lt;strong&gt;KL divergence&lt;/strong&gt; between the desired and actual output.&lt;/li&gt;
+&lt;li&gt;The loss function is derived from likelihood principles:
+$$ L(\theta) = -\sum_{i} y_i \log P(Y_i | X_i, \theta) + (1 - y_i) \log(1 - P(Y_i | X_i, \theta)) $$&lt;/li&gt;
+&lt;li&gt;Requires &lt;strong&gt;gradient descent&lt;/strong&gt; for optimization.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;network-structure&#34;&gt;Network Structure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The final neuron in the network acts as a &lt;strong&gt;linear classifier&lt;/strong&gt; on the transformed data.&lt;/li&gt;
+&lt;li&gt;The network &lt;strong&gt;transforms non-linear data&lt;/strong&gt; into linearly separable feature space.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Feature extractor layers&lt;/strong&gt; convert input space $X$ into feature space $Y$ where classes are separable.&lt;/li&gt;
+&lt;li&gt;Feature extraction layers include &lt;strong&gt;convolutional layers (CNNs), recurrent layers (RNNs), and transformer layers&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;autoencoder-ae&#34;&gt;Autoencoder (AE)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Definition&lt;/strong&gt;: A neural network that copies its input to its output.
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Encoder&lt;/strong&gt;: $h = f(x)$&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Decoder&lt;/strong&gt;: $r = g(h)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Used for &lt;strong&gt;dimensionality reduction&lt;/strong&gt; and feature extraction.&lt;/li&gt;
+&lt;li&gt;Applications:
+&lt;ul&gt;
+&lt;li&gt;Image compression&lt;/li&gt;
+&lt;li&gt;Feature extraction for classification&lt;/li&gt;
+&lt;li&gt;Denoising corrupted signals&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;linear-vs-non-linear-autoencoders&#34;&gt;Linear vs. Non-Linear Autoencoders&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Linear AE minimizes squared reconstruction error (like PCA).&lt;/li&gt;
+&lt;li&gt;Non-Linear AE finds a &lt;strong&gt;non-linear manifold&lt;/strong&gt; that best represents the data.&lt;/li&gt;
+&lt;li&gt;Loss function for reconstruction:
+$$ L(x, g(f(x))) = || x - g(f(x)) ||^2 $$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;deep-autoencoder&#34;&gt;Deep Autoencoder&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Multi-layer Autoencoders&lt;/strong&gt; capture more complex structures.&lt;/li&gt;
+&lt;li&gt;Trained using &lt;strong&gt;Restricted Boltzmann Machines (RBMs)&lt;/strong&gt; followed by &lt;strong&gt;fine-tuning with backpropagation&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Layer-wise pretraining&lt;/strong&gt; is often used to initialize deep autoencoders before fine-tuning.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;avoiding-trivial-identity-mapping&#34;&gt;Avoiding Trivial Identity Mapping&lt;/h2&gt;
+&lt;h3 id=&#34;undercomplete-autoencoders&#34;&gt;Undercomplete Autoencoders&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Restrict $h$ to lower dimension than $x$.&lt;/li&gt;
+&lt;li&gt;Loss function:
+$$ L(x, g(f(x))) $$&lt;/li&gt;
+&lt;li&gt;Non-linear encoders extract useful features beyond PCA.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;overcomplete-autoencoders&#34;&gt;Overcomplete Autoencoders&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Higher dimensional $h$ may lead to trivial identity mapping.&lt;/li&gt;
+&lt;li&gt;Regularization techniques:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Sparse AE&lt;/strong&gt;: Encourages sparsity.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Denoising AE&lt;/strong&gt;: Recovers corrupted input.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Contractive AE&lt;/strong&gt;: Encourages robustness to perturbations.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;variational-autoencoder-vae&#34;&gt;Variational Autoencoder (VAE)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Imposes a constraint on the latent variable $z$.&lt;/li&gt;
+&lt;li&gt;Ensures $z$ follows a &lt;strong&gt;Gaussian distribution&lt;/strong&gt;:
+$$ p(z) = \mathcal{N}(0, I) $$&lt;/li&gt;
+&lt;li&gt;Uses &lt;strong&gt;reparameterization trick&lt;/strong&gt; to enable backpropagation:
+$$ z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I) $$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;vae-loss-function&#34;&gt;VAE Loss Function&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Combination of &lt;strong&gt;reconstruction loss&lt;/strong&gt; and &lt;strong&gt;KL divergence loss&lt;/strong&gt;:
+$$ L = \mathbb{E}[\log p(x|z)] - D_{KL}(q(z|x) || p(z)) $$&lt;/li&gt;
+&lt;li&gt;KL divergence ensures that the latent variable follows a Gaussian distribution:
+$$ D_{KL}(q(z|x) || p(z)) = \frac{1}{2} \sum \left( \sigma^2 + \mu^2 - 1 - \log \sigma^2 \right) $$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;gaussian-mixture-models-gmm&#34;&gt;Gaussian Mixture Models (GMM)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Used for modeling complex distributions as a combination of Gaussian distributions.&lt;/li&gt;
+&lt;li&gt;Objective: Learn &lt;strong&gt;means, variances, and mixing probabilities&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;EM Algorithm is commonly used for training GMMs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;generative-models&#34;&gt;Generative Models&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Neural networks can be used as &lt;strong&gt;generative models&lt;/strong&gt; to learn probability distributions.&lt;/li&gt;
+&lt;li&gt;Examples:
+&lt;ul&gt;
+&lt;li&gt;Variational Autoencoders (VAEs)&lt;/li&gt;
+&lt;li&gt;Generative Adversarial Networks (GANs)&lt;/li&gt;
+&lt;li&gt;Diffusion Models&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Applications include &lt;strong&gt;image generation, text synthesis, and semantic hashing&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;applications-of-autoencoders&#34;&gt;Applications of Autoencoders&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Dimensionality reduction&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Feature learning for classification&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Image retrieval using binary codes&lt;/strong&gt; (semantic hashing)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data denoising&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Anomaly detection&lt;/strong&gt; in cybersecurity and healthcare&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Autoencoders provide powerful tools for representation learning.&lt;/li&gt;
+&lt;li&gt;VAEs extend AE capabilities by enabling &lt;strong&gt;probabilistic data generation&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Regularization techniques ensure meaningful feature extraction.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Generative models&lt;/strong&gt; play a crucial role in modern AI applications.&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Chapter 1</title>
+      <link>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-1/</link>
+      <pubDate>Mon, 10 Mar 2025 12:39:55 -0400</pubDate>
+      <guid>https://felipecordero.github.io/rnn_class/midterm_summary/chapter-1/</guid>
+      <description>&lt;script src=&#34;https://polyfill.io/v3/polyfill.min.js?features=es6&#34;&gt;&lt;/script&gt;
+&lt;script id=&#34;MathJax-script&#34; async src=&#34;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&#34;&gt;&lt;/script&gt;
+
+&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css&#34;&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js&#34;&gt;&lt;/script&gt;
+&lt;script defer src=&#34;https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js&#34;
+    onload=&#34;renderMathInElement(document.body);&#34;&gt;&lt;/script&gt;
+
+
+&lt;script&gt;
+document.addEventListener(&#34;DOMContentLoaded&#34;, function() {
+    document.querySelectorAll(&#34;pre code.language-math&#34;).forEach((block) =&gt; {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes(&#34;\n&#34;) ? &#34;\\[&#34; + mathContent + &#34;\\]&#34; : &#34;\\(&#34; + mathContent + &#34;\\)&#34;;
+        const wrapper = document.createElement(&#34;div&#34;);
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+&lt;/script&gt;
+
+&lt;h1 id=&#34;neural-network-fundamentals&#34;&gt;Neural Network Fundamentals&lt;/h1&gt;
+&lt;h2 id=&#34;multi-layered-neural-network&#34;&gt;Multi-layered Neural Network&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Structure&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Input: 10 numbers&lt;/li&gt;
+&lt;li&gt;Output: 4 decisions or predictions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backpropagation&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Used to calculate the error in predictions and adjust the network.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sensitivity-in-neural-networks&#34;&gt;Sensitivity in Neural Networks&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Sensitivity measures how much the error at the output ((\Delta E)) changes due to small input variations.&lt;/li&gt;
+&lt;li&gt;Sensitivity is propagated backward using:
+$$
+\delta_{p1} = \frac{\partial E}{\partial p1}
+$$&lt;/li&gt;
+&lt;li&gt;Error computation block:
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;\{2(o1 - t1), 2(o2 - t2), 2(o3 - t3), 2(o4 - t4)\}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;activation-functions&#34;&gt;Activation Functions&lt;/h2&gt;
+&lt;h3 id=&#34;sigmoid-function&#34;&gt;Sigmoid Function&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;\sigma(x) = \frac{1}{1 + e^{-x}}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Outputs range: (0,1)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Issues&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Saturates and kills gradients.&lt;/li&gt;
+&lt;li&gt;Not zero-centered.&lt;/li&gt;
+&lt;li&gt;Computationally expensive.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tanh-function&#34;&gt;Tanh Function&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Outputs range: (-1,1)&lt;/li&gt;
+&lt;li&gt;Zero-centered but still prone to gradient saturation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;relu-rectified-linear-unit&#34;&gt;ReLU (Rectified Linear Unit)&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;f(x) = \max(0, x)
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Does not saturate in the positive region.&lt;/li&gt;
+&lt;li&gt;Computationally efficient.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Drawbacks&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Can lead to &amp;ldquo;dead neurons&amp;rdquo; (never activating).&lt;/li&gt;
+&lt;li&gt;Not zero-centered.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;leaky-relu&#34;&gt;Leaky ReLU&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;f(x) = \max(\alpha x, x), \quad \alpha \approx 0.01
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Addresses dead neuron issue by allowing small negative values.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;elu-exponential-linear-unit&#34;&gt;ELU (Exponential Linear Unit)&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;f(x) = \begin{cases}
+x, &amp;amp; x &amp;gt; 0 \\
+\alpha (e^x - 1), &amp;amp; x \leq 0
+\end{cases}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Zero-centered.&lt;/li&gt;
+&lt;li&gt;More robust than ReLU in noise-prone settings.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;maxout&#34;&gt;Maxout&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;f(x) = \max(w_1^T x + b_1, w_2^T x + b_2)
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Generalizes ReLU and Leaky ReLU.&lt;/li&gt;
+&lt;li&gt;Doubles parameters per neuron.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;practical-choice&#34;&gt;Practical Choice&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Use &lt;strong&gt;ReLU&lt;/strong&gt; as the default.&lt;/li&gt;
+&lt;li&gt;Try &lt;strong&gt;Leaky ReLU, Maxout, or ELU&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Avoid &lt;strong&gt;Sigmoid&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;data-preprocessing&#34;&gt;Data Preprocessing&lt;/h2&gt;
+&lt;h3 id=&#34;zero-mean&#34;&gt;Zero Mean&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;X \leftarrow X - \text{mean}(X, \text{axis}=0)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;normalization&#34;&gt;Normalization&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;X \leftarrow \frac{X}{\text{std}(X, \text{axis}=0)}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;pca--whitening&#34;&gt;PCA &amp;amp; Whitening&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;PCA decorrelates data.&lt;/li&gt;
+&lt;li&gt;Whitening scales dimensions by eigenvalues.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;key-rule&#34;&gt;Key Rule&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Compute statistics &lt;strong&gt;only on training data&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Apply transformation to test/validation data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;weight-initialization&#34;&gt;Weight Initialization&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Proper initialization prevents gradient vanishing or explosion.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;w = \frac{\text{randn}(n)}{\sqrt{n}}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;For ReLU:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;w = \frac{\text{randn}(n)}{\sqrt{n/2}}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;batch-normalization-bn&#34;&gt;Batch Normalization (BN)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Reduces internal covariate shift&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;BN normalizes activations:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;\hat{x} = \frac{x - \mu}{\sigma}
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Applied before the activation function.&lt;/li&gt;
+&lt;li&gt;At test time, uses fixed mean/std from training.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;regularization&#34;&gt;Regularization&lt;/h2&gt;
+&lt;h3 id=&#34;l2-regularization-weight-decay&#34;&gt;L2 Regularization (Weight Decay)&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;R(f) = \lambda ||w||^2
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;l1-regularization&#34;&gt;L1 Regularization&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;R(f) = \lambda ||w||
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Leads to sparse weights.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;elastic-net&#34;&gt;Elastic Net&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Combination of L1 and L2.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dropout&#34;&gt;Dropout&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Randomly drops neurons during training.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Test-time&lt;/strong&gt;: Scale weights by dropout probability ( p ).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;hyperparameter-optimization&#34;&gt;Hyperparameter Optimization&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Random Search&lt;/strong&gt; &amp;gt; Grid Search.&lt;/li&gt;
+&lt;li&gt;Bayesian Optimization speeds up the process.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Common Hyperparameters&lt;/strong&gt;:
+&lt;ul&gt;
+&lt;li&gt;Learning rate.&lt;/li&gt;
+&lt;li&gt;Batch size.&lt;/li&gt;
+&lt;li&gt;Number of layers.&lt;/li&gt;
+&lt;li&gt;Dropout rate.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;loss-functions&#34;&gt;Loss Functions&lt;/h2&gt;
+&lt;h3 id=&#34;classification&#34;&gt;Classification&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Softmax with Cross-Entropy Loss&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;L = - \sum_{i} y_i \log(\hat{y}_i)
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hinge Loss&lt;/strong&gt; (for SVMs):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;L = \sum_{i} \max(0, 1 - y_i \hat{y}_i)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;regression&#34;&gt;Regression&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;L2 Loss&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;L = \sum_i (y_i - \hat{y}_i)^2
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;L1 Loss&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;L = \sum_i |y_i - \hat{y}_i|
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;parameter-update&#34;&gt;Parameter Update&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;After computing gradients via &lt;strong&gt;backpropagation&lt;/strong&gt;, parameters are updated using:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;vanilla-sgd&#34;&gt;Vanilla SGD&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;w \leftarrow w - \eta \nabla w
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;momentum-update&#34;&gt;Momentum Update&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;v \leftarrow \beta v - \eta \nabla w
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;w \leftarrow w + v
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;nesterov-accelerated-gradient&#34;&gt;Nesterov Accelerated Gradient&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;v \leftarrow \beta v - \eta \nabla w&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-math&#34; data-lang=&#34;math&#34;&gt;w&amp;#39; \leftarrow w + \beta v
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;final-notes&#34;&gt;Final Notes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Choose activation functions wisely&lt;/strong&gt; (ReLU recommended).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use normalization and proper weight initialization&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Apply regularization techniques&lt;/strong&gt; (L2, Dropout).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Optimize hyperparameters systematically&lt;/strong&gt; (Bayesian search preferred).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Understand loss functions&lt;/strong&gt; based on classification vs. regression.&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>
