@@ -1,0 +1,8 @@
+{{ $filePath := .Get 0 }}
+{{ $file := readFile $filePath }}
+{{ if $file }}
+    {{ $content := $file | markdownify }}
+    {{ $content | safeHTML }}
+{{ else }}
+    <p>Error: File not found at '{{ $filePath }}'</p>
+{{ end }}

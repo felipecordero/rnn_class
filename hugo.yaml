@@ -1,0 +1,15 @@
+baseURL: https://example.org/
+languageCode: en-us
+title: RNN Class
+theme: ["PaperMod"]
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+params:
+  customCSS:
+    - href: "css/custom.css"
+
+

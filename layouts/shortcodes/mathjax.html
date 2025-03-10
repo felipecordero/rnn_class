@@ -1,0 +1,24 @@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("pre code.language-math").forEach((block) => {
+        const mathContent = block.textContent.trim();
+        const displayMode = mathContent.includes("\n") ? "\\[" + mathContent + "\\]" : "\\(" + mathContent + "\\)";
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = displayMode;
+        block.parentNode.replaceWith(wrapper);
+    });
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+});
+</script>
